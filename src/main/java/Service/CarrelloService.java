@@ -42,5 +42,5 @@ public class CarrelloService {
             c.setAcquirente(a);
             return carrelloRepo.save(c);
         });
-    }
+    }}
 
