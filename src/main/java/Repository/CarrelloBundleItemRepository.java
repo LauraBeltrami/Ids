@@ -1,6 +1,5 @@
 package Repository;
 
-
 import Model.CarrelloBundleItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 
