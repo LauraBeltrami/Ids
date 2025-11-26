@@ -2,6 +2,7 @@ package Model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -24,6 +25,19 @@ public class Bundle {
     @Column(nullable = false)
     private String nome;
 
+    @Min(0)
+    public int getQuantitaDisponibile() {
+        return quantitaDisponibile;
+    }
+
+    public void setQuantitaDisponibile(@Min(0) int quantitaDisponibile) {
+        this.quantitaDisponibile = quantitaDisponibile;
+    }
+
+    @Min(0) // La quantità non può essere negativa
+    @Column(nullable = false)
+    private int quantitaDisponibile = 0;
+
     @NotNull
     @DecimalMin("0.00")
     @Column(nullable = false, precision = 12, scale = 2)
@@ -37,8 +51,9 @@ public class Bundle {
     private Set<BundleItem> items = new HashSet<>();
 
     public Bundle() { }
-    public Bundle(Long id, String nome, BigDecimal prezzo, Distributore distributore) {
+    public Bundle(Long id, String nome, BigDecimal prezzo, Distributore distributore,int quantitaDisponibile) {
         this.id = id; this.nome = nome; this.prezzo = prezzo; this.distributore = distributore;
+        this.quantitaDisponibile = quantitaDisponibile;
     }
 
     public Long getId() { return id; }
@@ -50,6 +65,5 @@ public class Bundle {
     public Distributore getDistributore() { return distributore; }
     public void setDistributore(Distributore distributore) { this.distributore = distributore; }
     public Set<BundleItem> getItems() { return items; }
-    public void setItems(Set<BundleItem> items) { this.items=items;}
-}
-
+    public void setItems(Set<BundleItem> items) { this.items = items; }
+}ù
