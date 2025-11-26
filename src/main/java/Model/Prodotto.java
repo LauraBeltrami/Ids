@@ -31,7 +31,6 @@ public class Prodotto {
     @Column(nullable = false)
     private StatoProdotto stato = StatoProdotto.IN_VALIDAZIONE;
 
-    // Presente solo se APPROVATO
     @OneToOne(mappedBy = "prodotto", fetch = FetchType.LAZY)
     private Certificazione certificazione;
 
