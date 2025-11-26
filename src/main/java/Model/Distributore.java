@@ -1,7 +1,4 @@
-package Model;
-
 import jakarta.persistence.*;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,9 +10,14 @@ public class Distributore extends Venditore {
             cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Bundle> bundles = new HashSet<>();
 
-    public Distributore() { }
-    public Distributore(Long id, String nome) { super(id, nome); }
+    public Distributore() {
+        super();
+    }
+
+    public Distributore(Long id, String nome, String indirizzo, String email, String password) {
+        super(id, nome, indirizzo, email, password);
+    }
 
     public Set<Bundle> getBundles() { return bundles; }
-    public void setBundles(Set<Bundle> bundles) { this.bundles=bundles;}
+    public void setBundles(Set<Bundle> bundles) { this.bundles = bundles; }
 }
