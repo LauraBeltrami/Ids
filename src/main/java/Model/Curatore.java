@@ -1,3 +1,5 @@
+package Model;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
