@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 @RequestMapping("/api/venditori/{venditoreId}/prodotti")
 public class VenditoreController {
 
+    
     private final ProdottoService prodottoService;
 
     private final InvitoHandler eventoService;
