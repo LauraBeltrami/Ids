@@ -4,7 +4,9 @@ package Repository;
 import Model.Acquirente;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AcquirenteRepository extends JpaRepository<Acquirente, Long> { }
+import java.util.Optional;
 
-
+public interface AcquirenteRepository extends JpaRepository<Acquirente, Long> {
+    Optional<Acquirente> findByEmail(String email);
+}
 
