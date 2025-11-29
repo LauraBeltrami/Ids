@@ -1,6 +1,7 @@
 package DTO;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public record ProdottoDTO(
         Long id,
@@ -9,7 +10,8 @@ public record ProdottoDTO(
         String stato,          // "IN_VALIDAZIONE" | "APPROVATO" | "RIFIUTATO"
         Long venditoreId,
         String venditoreNome,
-        CertificazioneDTO certificazione // null se non approvato
+        int quantitaDisponibile,
+        List<CertificazioneDTO> certificazioni
 ) {}
 
 
