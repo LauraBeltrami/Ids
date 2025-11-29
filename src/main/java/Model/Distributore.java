@@ -1,7 +1,5 @@
 package Model;
 
-import Model.Bundle;
-import Model.Venditore;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,9 +12,7 @@ public class Distributore extends Venditore {
             cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Bundle> bundles = new HashSet<>();
 
-    public Distributore() {
-        super();
-    }
+    public Distributore() {super();}
 
     public Distributore(Long id, String nome, String indirizzo, String email, String password) {
         super(id, nome, indirizzo, email, password);
