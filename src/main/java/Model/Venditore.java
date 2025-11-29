@@ -3,7 +3,7 @@ package Model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import Getter;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
