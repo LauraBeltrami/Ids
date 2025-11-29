@@ -27,8 +27,25 @@ public class Evento {
     @JoinColumn(name = "animatore_id", nullable = false)
     private Animatore animatore;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "evento_prenotazioni",  // Nome della tabella di join che verrà creata
+            joinColumns = @JoinColumn(name = "evento_id"),
+            inverseJoinColumns = @JoinColumn(name = "acquirente_id")
+    )
+    private Set<Acquirente> prenotazioni = new HashSet<>();
+
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<InvitoEvento> inviti = new HashSet<>();
+
+    public Set<Acquirente> getPrenotazioni() {
+        return prenotazioni;
+    }
+
+    public void setPrenotazioni(Set<Acquirente> prenotazioni) {
+        this.prenotazioni = prenotazioni;
+    }
+
 
     public Evento() {}
     public Evento(Long id, String titolo, String descrizione, String luogo,
