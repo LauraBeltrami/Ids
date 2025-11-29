@@ -66,4 +66,4 @@ public class Bundle {
     public void setDistributore(Distributore distributore) { this.distributore = distributore; }
     public Set<BundleItem> getItems() { return items; }
     public void setItems(Set<BundleItem> items) { this.items = items; }
-}ù
+}

@@ -1,12 +1,10 @@
 package Model;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
-// RIMOSSO: uniqueConstraints (un prodotto può avere più certificazioni)
 @Table(name = "certificazioni")
 public class Certificazione {
 
@@ -17,7 +15,6 @@ public class Certificazione {
     @Column(nullable = false)
     private String descrizione;
 
-    // MODIFICATO: Da @OneToOne a @ManyToOne
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "prodotto_id", nullable = false) // RIMOSSO: unique = true
     private Prodotto prodotto;
