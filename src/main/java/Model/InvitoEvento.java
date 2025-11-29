@@ -1,8 +1,12 @@
 package Model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@NoArgsConstructor
+@Getter
+@Setter
 @Table(name = "inviti_evento",
         indexes = { @Index(name="idx_invito_evento", columnList = "evento_id"),
                 @Index(name="idx_invito_venditore", columnList = "venditore_id") },
@@ -21,27 +25,17 @@ public class InvitoEvento {
     @JoinColumn(name = "venditore_id", nullable = false)
     private Venditore venditore;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatoInvito stato = StatoInvito.IN_ATTESA;
     // solo una nota libera (facoltativa)
     private String nota;
 
-    public InvitoEvento() {}
-    public InvitoEvento(Evento evento, Venditore venditore, String nota) {
-        this.evento = evento; this.venditore = venditore; this.nota = nota;
-    }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Venditore getVenditore() {
-        return venditore;
-    }
-
-    public Evento getEvento() {
-        return evento;
-    }
-
-    public String getNota() {
-        return nota;
+    public InvitoEvento(Evento evento, Venditore venditore, StatoInvito stato, String nota) {
+        this.evento = evento;
+        this.venditore = venditore;
+        this.stato = stato;
+        this.nota = nota;
     }
 }
