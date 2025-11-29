@@ -1,12 +1,16 @@
 package Model;
 
-
 public enum Ruolo {
     ACQUIRENTE("Acquirente"),
     VENDITORE("Venditore"),
     CURATORE("Curatore"),
     ADMIN("Admin"),
-    GESTORE_PIATTAFORMA("Gestore Piattaforma");
+    GESTORE_PIATTAFORMA("GestorePiattaforma"),
+    TRASFORMATORE("Trasformatore"),
+    ANIMATORE("AnimatOre"),
+    DISTRIBUTORE("Distributore");
+
+
 
     private final String label;
 
