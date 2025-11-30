@@ -1,5 +1,6 @@
 package Repository;
 
+
 import Model.Venditore;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -8,5 +9,6 @@ import java.util.Optional;
 
 public interface VenditoreRepository extends JpaRepository<Venditore, Long> {
     List<Venditore> findByApprovatoFalse();
+    List<Venditore> findByApprovatoTrue();
     Optional<Venditore> findByEmail(String email);
 }
