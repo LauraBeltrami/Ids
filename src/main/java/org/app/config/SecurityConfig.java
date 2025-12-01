@@ -48,7 +48,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/eventi/**").permitAll() // Tutti possono vedere gli eventi
 
                         // Catalogo: lettura pubblica (GET)
-                        .requestMatchers(HttpMethod.GET, "/api/catalogo/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/public/catalogo/**").permitAll()
 
                         // H2 Console (se la usi, serve per permettere l'accesso)
                         .requestMatchers("/h2-console/**").permitAll()

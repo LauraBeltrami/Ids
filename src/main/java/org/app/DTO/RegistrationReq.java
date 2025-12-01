@@ -3,7 +3,8 @@ package org.app.DTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public record RegistrationReq(
+public record
+RegistrationReq(
         @NotBlank String nome,
         String cognome, // Opzionale (usato solo da Acquirente)
         String indirizzo,
