@@ -44,6 +44,9 @@ public class SecurityConfig {
                         // Curatori (se hai controller per loro)
                         .requestMatchers("/api/curatori/**").hasRole("CURATORE")
 
+                        .requestMatchers("/api/admin/**").hasRole("GESTORE_PIATTAFORMA")
+
+
                         // Eventi: Lettura pubblica (GET), Scrittura protetta (se servisse)
                         .requestMatchers(HttpMethod.GET, "/api/eventi/**").permitAll() // Tutti possono vedere gli eventi
 
@@ -54,8 +57,7 @@ public class SecurityConfig {
                         .requestMatchers("/h2-console/**").permitAll()
 
                         .requestMatchers("/api/auth/register/**").permitAll()
-                        // Tutto il resto richiede autenticazione
-                        .anyRequest().authenticated()
+
                 )
 
                 .userDetailsService(customUserDetailsService) // <-- DICIAMO DI USARE IL NOSTRO SERVICE

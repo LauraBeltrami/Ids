@@ -1,10 +1,8 @@
 package org.app.config;
 
 import org.app.Model.*;
-import org.app.Repository.AcquirenteRepository;
-import org.app.Repository.AnimatoreRepository;
-import org.app.Repository.CuratoreRepository;
-import org.app.Repository.VenditoreRepository;
+import org.app.Repository.*;
+
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,48 +18,68 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final VenditoreRepository venditoreRepo;
     private final AnimatoreRepository animatoreRepo;
     private final CuratoreRepository curatoreRepo;
+    private final GestoreRepository gestoreRepo;
 
     public CustomUserDetailsService(AcquirenteRepository acquirenteRepo,
                                     VenditoreRepository venditoreRepo,
                                     AnimatoreRepository animatoreRepo,
-                                    CuratoreRepository curatoreRepo) {
+                                    CuratoreRepository curatoreRepo,
+                                    GestoreRepository gestoreRepo) {
         this.acquirenteRepo = acquirenteRepo;
         this.venditoreRepo = venditoreRepo;
         this.animatoreRepo = animatoreRepo;
         this.curatoreRepo = curatoreRepo;
+        this.gestoreRepo = gestoreRepo;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        // Strategia "Brute Force": Cerca in tutte le tabelle finché non lo trovi.
-        // Nota: Assumiamo che l'email sia univoca in tutto il sistema.
 
-        // 1. Cerca Acquirente
+        // 0. Gestore piattaforma (admin)
+        Optional<GestorePiattaforma> gestore = gestoreRepo.findByEmail(email);
+        if (gestore.isPresent()) {
+            return buildUser(gestore.get());
+        }
+
+        // 1. Acquirente
         Optional<Acquirente> acq = acquirenteRepo.findByEmail(email);
-        if (acq.isPresent()) return buildUser(acq.get());
+        if (acq.isPresent()) {
+            return buildUser(acq.get());
+        }
 
-        // 2. Cerca Venditore (devi aggiungere findByEmail nel repo se non c'è)
+        // 2. Venditore
         Optional<Venditore> ven = venditoreRepo.findByEmail(email);
-        if (ven.isPresent()) return buildUser(ven.get());
+        if (ven.isPresent()) {
+            return buildUser(ven.get());
+        }
 
-        // 3. Cerca Animatore
+        // 3. Animatore
         Optional<Animatore> anim = animatoreRepo.findByEmail(email);
-        if (anim.isPresent()) return buildUser(anim.get());
+        if (anim.isPresent()) {
+            return buildUser(anim.get());
+        }
 
-        // 4. Cerca Curatore
+        // 4. Curatore
         Optional<Curatore> cur = curatoreRepo.findByEmail(email);
-        if (cur.isPresent()) return buildUser(cur.get());
+        if (cur.isPresent()) {
+            return buildUser(cur.get());
+        }
 
         throw new UsernameNotFoundException("Utente non trovato con email: " + email);
     }
 
-    // Metodo helper per convertire il nostro AbstractUtente in uno User di Spring Security
     private UserDetails buildUser(AbstractUtente utente) {
-        return User.builder()
-                .username(utente.getEmail())   // Usiamo l'email come username
-                .password(utente.getPassword()) // La password cifrata dal DB
-                .authorities(utente.getRuolo()) // Il ruolo (es. ROLE_ACQUIRENTE)
-                .disabled(!utente.isApprovato()) // <-- MAGIA: Se approvato=false, il login fallisce qui!
-                .build();
-    }}
+        // es: utente.getRuolo() = "ACQUIRENTE", "VENDITORE", "GESTORE_PIATTAFORMA", ...
+        String role = utente.getRuolo();
 
+        // Spring Security si aspetta authorities tipo "ROLE_ACQUIRENTE"
+        String authority = role.startsWith("ROLE_") ? role : "ROLE_" + role;
+
+        return User.builder()
+                .username(utente.getEmail())
+                .password(utente.getPassword())
+                .authorities(authority)
+                .disabled(!utente.isApprovato())
+                .build();
+    }
+}
