@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "carrelli")
@@ -20,10 +22,10 @@ public class Carrello {
     private Acquirente acquirente;
 
     @OneToMany(mappedBy = "carrello", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CarrelloItem> items = new ArrayList<>();
+    private Set<CarrelloItem> items = new HashSet<>(); // <-- SOLUZIONE
 
     @OneToMany(mappedBy = "carrello", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CarrelloBundleItem> bundleItems = new ArrayList<>();
+    private Set<CarrelloBundleItem> bundleItems = new HashSet<>(); // <-- SOLUZIONE
 
     public Carrello() {}
     public Carrello(Long id, Acquirente acquirente) {
@@ -36,11 +38,11 @@ public class Carrello {
     public Acquirente getAcquirente() { return acquirente; }
     public void setAcquirente(Acquirente acquirente) { this.acquirente = acquirente; }
 
-    public List<CarrelloItem> getItems() { return items; }
-    public void setItems(List<CarrelloItem> items) { this.items = items; }
+    public Set<CarrelloItem> getItems() { return items; }
+    public void setItems(Set<CarrelloItem> items) { this.items = items; }
 
-    public List<CarrelloBundleItem> getBundleItems() { return bundleItems; }
-    public void setBundleItems(List<CarrelloBundleItem> bundleItems) { this.bundleItems = bundleItems; }
+    public Set<CarrelloBundleItem> getBundleItems() { return bundleItems; }
+    public void setBundleItems(Set<CarrelloBundleItem> bundleItems) { this.bundleItems = bundleItems; }
 
     /** Numero complessivo di unità: somma quantità prodotti + quantità bundle (ogni bundle conta come 1 unità per quantità). */
     public int getNumeroArticoli() {
@@ -60,6 +62,5 @@ public class Carrello {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return totProdotti.add(totBundle);
+    }
 }
-}
-
