@@ -32,7 +32,7 @@ public class SecurityConfig {
                 // 2. Configura le regole di accesso (Autorizzazione)
                 .authorizeHttpRequests(auth -> auth
                         // Animatori
-                        .requestMatchers("/api/animatori/**").hasRole("ANIMATORE")
+                        .requestMatchers("/api/eventi/**").hasRole("ANIMATORE")
 
                         // Venditori (e Distributori)
                         .requestMatchers("/api/venditori/**").hasAnyRole("TRASFORMATORE", "VENDITORE")

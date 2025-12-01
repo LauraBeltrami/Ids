@@ -15,7 +15,7 @@ import java.util.List;
 
 @Validated
 @RestController
-@RequestMapping("/api/inviti")
+@RequestMapping("/api/eventi")
 public class InvitiController {
 
     private final EventoService eventoService;

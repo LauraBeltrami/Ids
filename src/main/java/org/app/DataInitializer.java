@@ -142,12 +142,20 @@ public class DataInitializer implements CommandLineRunner {
         BundleItem item2 = new BundleItem(null, b1, p3, 2); // 2 Grissini
         bundleItemRepo.save(item2);
 
+
+        Curatore curatoreNonApprovato = new Curatore(null, "Mario Artista2", "curatore2@mail.com", passwordEncoder.encode("pass"));
+        curatoreNonApprovato.setApprovato(false);
+        curatoreRepo.save(curatoreNonApprovato);
+
         // ================================================================
         //                     STAMPE PER IL TUO TEST
         // ================================================================
         System.out.println("\n==================================================");
         System.out.println("🔍 RIEPILOGO DATI PER POSTMAN (Login: Basic Auth)");
         System.out.println("==================================================");
+
+        System.out.println("Curatore non approvato ID: " + curatoreNonApprovato.getId());
+
 
         System.out.println("👤 ANIMATORI:");
         System.out.println("   [ID: " + a1.getId() + "] User: dj@mail.com       | Pass: pass  (Approvato: " + a1.isApprovato() + ")");
