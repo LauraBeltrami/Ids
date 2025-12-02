@@ -151,7 +151,6 @@ public class ProdottoService {
         return ProdottoMapper.toDTO(p);
     }
 
-    // Il metodo rimuoviCertificazione rimane uguale, ma aggiungiamo il check sul venditore
     public ProdottoDTO rimuoviCertificazione(Long prodottoId, Long certificazioneId) {
         Prodotto p = prodottoRepo.findById(prodottoId)
                 .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
