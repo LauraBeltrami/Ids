@@ -3,11 +3,12 @@ package org.app.Service;
 import org.app.DTO.EventoDTO;
 import org.app.DTO.EventoMapper;
 import org.app.DTO.InvitoDTO;
+import org.app.Model.*;
+import org.app.Repository.*;
 import org.app.Exceptions.BusinessException;
 import org.app.Exceptions.NotFoundException;
 import jakarta.transaction.Transactional;
-import org.app.Model.*;
-import org.app.Repository.*;
+import org.app.observer.InvitoObserver;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,17 +23,19 @@ public class EventoService implements InvitoHandler,PrenotazioneHandler{
     private final InvitoEventoRepository invitoRepo;
     private final AcquirenteRepository acquirenteRepo;
     private final VenditoreRepository venditoreRepo;
+    private final List<InvitoObserver> observers;
 
     public EventoService(AnimatoreRepository animatoreRepo,
                          EventoRepository eventoRepo,
                          InvitoEventoRepository invitoRepo,
                          VenditoreRepository venditoreRepo,
-                         AcquirenteRepository acquirenteRepo) {
+                         AcquirenteRepository acquirenteRepo, List<InvitoObserver> observers) {
         this.animatoreRepo = animatoreRepo;
         this.eventoRepo = eventoRepo;
         this.invitoRepo = invitoRepo;
         this.venditoreRepo = venditoreRepo;
         this.acquirenteRepo = acquirenteRepo;
+        this.observers = observers;
     }
 
     // --- Eventi ---
@@ -61,14 +64,32 @@ public class EventoService implements InvitoHandler,PrenotazioneHandler{
         Evento e = eventoRepo.findGraphById(eventoId)
                 .orElseThrow(() -> new NotFoundException("Evento non trovato: " + eventoId));
         Venditore v = venditoreRepo.findById(venditoreId)
-                .orElseThrow(() -> new NotFoundException("Venditore/Distributore non trovato: " + venditoreId));
+                .orElseThrow(() -> new NotFoundException("Venditore non trovato: " + venditoreId));
 
         invitoRepo.findByEventoIdAndVenditoreId(eventoId, venditoreId).ifPresent(x -> {
             throw new BusinessException("Già invitato a questo evento.");
         });
 
-        e.getInviti().add(new InvitoEvento(e, v,StatoInvito.IN_ATTESA, nota));
+        // Creo l'oggetto invito
+        InvitoEvento nuovoInvito = new InvitoEvento(e, v, StatoInvito.IN_ATTESA, nota);
+
+        // Lo aggiungo alla collezione
+        e.getInviti().add(nuovoInvito);
+
+        // Nota: Poiché siamo Transactional, l'ID dell'invito potrebbe non essere ancora generato
+        // finché non avviene il flush/commit, ma l'oggetto esiste.
+
+        // 3. NOTIFICA GLI OBSERVERS
+        notificaObservers(nuovoInvito);
+
         return EventoMapper.toDTO(e);
+    }
+
+    // Metodo helper per il pattern Observer
+    private void notificaObservers(InvitoEvento invito) {
+        for (InvitoObserver observer : observers) {
+            observer.onInvitoCreato(invito);
+        }
     }
 
     public EventoDTO rimuoviInvito(Long eventoId, Long venditoreId) {
@@ -145,4 +166,4 @@ public class EventoService implements InvitoHandler,PrenotazioneHandler{
     }
 
 
-}
+}}
