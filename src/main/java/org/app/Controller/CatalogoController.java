@@ -37,7 +37,7 @@ public class CatalogoController {
         return dto;
     }
 
-    // (Opzionale) Catalogo bundle
+    // Catalogo bundle
     @GetMapping("/bundles")
     public List<BundleDTO> listaBundles(@RequestParam(required = false) Long distributoreId) {
         if (distributoreId == null) {
